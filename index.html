@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v15';
+            const APP_VERSION = '2026.11.24-v16';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const SYNC_FLAG = 'challenge_boxk_last_sync_ver';
 
@@ -328,7 +328,6 @@
                 return;
             }
 
-            // Checagem silenciosa no servidor para capturar atualizações recentes sem cache
             if (sessionStorage.getItem(SYNC_FLAG) !== APP_VERSION) {
                 sessionStorage.setItem(SYNC_FLAG, APP_VERSION);
                 const probeUrl = window.location.origin + window.location.pathname + '?live_check=' + Date.now();
@@ -394,36 +393,25 @@
 
         async function startCamera(facing) {
             if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); }
-            const wideHdConstraints = {
-                video: {
-                    facingMode: facing,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                },
-                audio: false
-            };
-            try {
-                currentStream = await navigator.mediaDevices.getUserMedia(wideHdConstraints);
-                video.srcObject = currentStream;
-                await video.play();
-            } catch (err) {
+            const attempts = [
+                { video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false },
+                { video: { facingMode: facing, width: { ideal: 1080 }, height: { ideal: 1920 } }, audio: false },
+                { video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+                { video: { facingMode: facing }, audio: false },
+                { video: true, audio: false }
+            ];
+
+            for (const constraints of attempts) {
                 try {
-                    currentStream = await navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: facing },
-                        audio: false
-                    });
+                    currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                     video.srcObject = currentStream;
                     await video.play();
-                } catch (e) {
-                    try {
-                        currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                        video.srcObject = currentStream;
-                        await video.play();
-                    } catch (errFinal) {
-                        alert("Permita o acesso à câmera no seu navegador!");
-                    }
+                    return;
+                } catch (err) {
+                    continue;
                 }
             }
+            alert("Permita o acesso à câmera no seu navegador!");
         }
 
         function switchCam() {
@@ -504,7 +492,6 @@
             gradRight.addColorStop(0, 'rgba(29, 91, 179, 0.6)'); gradRight.addColorStop(1, 'transparent');
             ctx.fillStyle = gradRight; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Realce discreto apenas na área inferior direita onde fica a marca, sem sujar a foto
             const logoSpotGrad = ctx.createRadialGradient(
                 canvas.width * 0.82, canvas.height * 0.84, 30,
                 canvas.width * 0.82, canvas.height * 0.84, canvas.width * 0.34
