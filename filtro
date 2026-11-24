@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Challenge Box K 2026 - Filtro Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            width: 100%; height: 100%; height: 100dvh;
+            background: #000; color: #fff;
+            font-family: 'Teko', sans-serif;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+
+        .stage {
+            position: relative;
+            width: 100vw; height: 100vh; height: 100dvh;
+            max-width: 430px; max-height: 900px;
+            background: #000; overflow: hidden;
+            display: flex; flex-direction: column;
+            justify-content: space-between; align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stage.active {
+            opacity: 1;
+        }
+
+        video, canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        #maskScreen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #172554 0%, #090d16 100%);
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .mask-title {
+            font-size: 42px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            line-height: 1.1;
+            background: linear-gradient(90deg, #F16623 0%, #ffffff 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .mask-desc {
+            font-family: sans-serif;
+            font-size: 14px;
+            color: #cbd5e1;
+            max-width: 280px;
+            margin-bottom: 35px;
+            line-height: 1.5;
+        }
+
+        .btn-load-filter {
+            background: linear-gradient(135deg, #F16623 0%, #ea580c 50%, #1d4ed8 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-family: 'Teko', sans-serif;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(241, 102, 35, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-load-filter:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 12px rgba(241, 102, 35, 0.25);
+        }
+
+        /* FUMAÇA ANIMADA NAS LATERAIS - LARANJA E AZUL */
+        .smoke-left {
+            position: absolute; top: 0; left: -25%;
+            width: 65%; height: 100%;
+            background: radial-gradient(circle at 10% 50%, rgba(241, 102, 35, 0.55), transparent 75%);
+            filter: blur(25px); pointer-events: none; z-index: 2;
+            animation: pulseL 3.5s ease-in-out infinite alternate;
+        }
+
+        .smoke-right {
+            position: absolute; top: 0; right: -25%;
+            width: 65%; height: 100%;
+            background: radial-gradient(circle at 90% 50%, rgba(29, 91, 179, 0.6), transparent 75%);
+            filter: blur(25px); pointer-events: none; z-index: 2;
+            animation: pulseR 3.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseL { 0% { opacity: 0.45; } 100% { opacity: 0.85; } }
+        @keyframes pulseR { 0% { opacity: 0.85; } 100% { opacity: 0.45; } }
+
+        /* MOLDURA / SOBREPOSIÇÃO SEM FUNDO DO CHALLENGE BOX K */
+        .frame-overlay-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            z-index: 3;
+            filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.45));
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 4; pointer-events: none;
+            display: flex; flex-direction: column;
+            justify-content: space-between; align-items: center;
+            padding: max(56px, env(safe-area-inset-top) + 22px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
+        }
+
+        .badge-card {
+            text-align: center; display: flex;
+            flex-direction: column; align-items: center;
+            justify-content: center; margin-top: 8px;
+            pointer-events: auto; cursor: pointer;
+            padding: 8px 16px; border-radius: 16px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            transition: all 0.2s;
+        }
+        .badge-card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
+
+        .badge-title {
+            font-size: clamp(34px, 8.5vw, 48px);
+            font-weight: 700; line-height: 0.9;
+            letter-spacing: 2px; text-transform: uppercase;
+            background: linear-gradient(90deg, #F16623 0%, #ffffff 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.95));
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .arrow-indicator {
+            font-size: 26px;
+            color: #cbd5e1;
+            -webkit-text-fill-color: #cbd5e1;
+            opacity: 0.85;
+        }
+
+        .badge-subtitle {
+            font-size: clamp(15px, 4vw, 20px);
+            font-weight: 700; letter-spacing: 4px;
+            color: #f8fafc; text-transform: uppercase;
+            margin-top: 6px;
+            filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.95));
+        }
+
+        #flashEffect {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 25; opacity: 0; pointer-events: none;
+            transition: opacity 0.15s ease-out;
+        }
+
+        #toastMsg {
+            position: absolute; top: 75px; left: 50%;
+            transform: translateX(-50%) translateY(-25px);
+            background: rgba(15, 15, 25, 0.95); color: #fff;
+            padding: 16px 24px; border-radius: 20px;
+            font-family: 'Segoe UI', sans-serif; font-size: 13px; font-weight: bold;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.85); z-index: 30; opacity: 0;
+            transition: all 0.3s ease; pointer-events: auto;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 12px; border: 1px solid rgba(255,255,255,0.25); text-align: center;
+        }
+
+        #toastMsg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .toast-actions {
+            display: flex; gap: 10px; width: 100%; justify-content: center;
+        }
+
+        .btn-share-native {
+            background: linear-gradient(135deg, #F16623, #1d4ed8);
+            color: #fff; border: none; padding: 8px 16px;
+            border-radius: 12px; font-weight: bold; font-size: 12px;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.5);
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .btn-retake {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px; border-radius: 12px; font-weight: bold; font-size: 12px;
+            cursor: pointer; display: flex; align-items: center; gap: 6px;
+            transition: background 0.2s;
+        }
+        .btn-retake:active { background: rgba(255, 255, 255, 0.3); }
+
+        .controls-bar {
+            position: absolute; bottom: max(20px, env(safe-area-inset-bottom));
+            left: 50%; transform: translateX(-50%); width: 65%; max-width: 260px;
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 10px 15px; background: rgba(12, 12, 18, 0.75);
+            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
+            z-index: 10; pointer-events: auto;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff; width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-icon svg { width: 20px; height: 20px; fill: #ffffff; transition: transform 0.3s ease; }
+        .btn-icon:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.22); }
+
+        .btn-shutter {
+            background: #ffffff; width: 62px; height: 62px; border-radius: 50%;
+            border: 4px solid rgba(241, 102, 35, 0.95); display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 0 24px rgba(241, 102, 35, 0.6); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-shutter svg { width: 26px; height: 26px; fill: #1d4ed8; }
+        .btn-shutter:active { transform: scale(0.92); background: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <div id="maskScreen">
+        <h1 class="mask-title">CHALLENGE BOX K 2026</h1>
+        <p class="mask-desc">Toque no botão abaixo para carregar a versão mais recente do seu filtro oficial.</p>
+        <button class="btn-load-filter" onclick="initializeExperience()">
+            <span>⚡</span> Carregar Filtro
+        </button>
+    </div>
+
+    <div class="stage" id="stageArea">
+        <video id="webcam" autoplay playsinline muted></video>
+
+        <div class="smoke-left"></div>
+        <div class="smoke-right"></div>
+
+        <img id="frameOverlayImg" class="frame-overlay-img" crossorigin="anonymous" alt="Challenge Box K 2026">
+
+        <div id="flashEffect"></div>
+
+        <div id="toastMsg">
+            <span>🔥 Foto capturada com sucesso!</span>
+            <div class="toast-actions">
+                <button class="btn-share-native" id="shareBtn">📤 Partilhar</button>
+                <button class="btn-retake" onclick="retakePhoto()">🔄 Tirar Outra</button>
+            </div>
+        </div>
+
+        <div class="overlay">
+            <div class="badge-card" onclick="nextBadge()" title="Toque para mudar frase">
+                <div class="badge-title">
+                    <span class="arrow-indicator">‹</span>
+                    <span id="badgeTitle">SOBREVIVI A PROVA</span>
+                    <span class="arrow-indicator">›</span>
+                </div>
+                <span id="badgeSubtitle" class="badge-subtitle">CHALLENGE BOX K 2026</span>
+            </div>
+            <div></div>
+        </div>
+
+        <canvas id="photoCanvas" style="display: none;"></canvas>
+
+        <div class="controls-bar">
+            <button class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
+                <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            </button>
+
+            <button class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">
+                <svg viewBox="0 0 24 24"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm10-3h-3.17L17 4H7L5.17 6H2v14h20V6zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const APP_VERSION = '2026.11.24-v10';
+            const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
+            if (storedVersion !== APP_VERSION) {
+                localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
+                if ('caches' in window) {
+                    caches.keys().then(names => { names.forEach(name => { caches.delete(name); }); });
+                }
+                window.location.replace(window.location.pathname + '?v=' + Date.now());
+            }
+        })();
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) { window.location.reload(true); }
+        });
+
+        const badgeList = [
+            { title: "SOBREVIVI A PROVA", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "MODO K ATIVADO", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "NO LIMITE", subtitle: "CHALLENGE BOX K 2026" }
+        ];
+
+        let currentBadgeIndex = 0;
+        let currentFacingMode = 'user';
+        let currentStream = null;
+        let lastGeneratedBlob = null;
+
+        const video = document.getElementById('webcam');
+        const badgeTitleElem = document.getElementById('badgeTitle');
+        const badgeSubtitleElem = document.getElementById('badgeSubtitle');
+        const frameOverlayImg = document.getElementById('frameOverlayImg');
+        const flashEffect = document.getElementById('flashEffect');
+        const toastMsg = document.getElementById('toastMsg');
+        const shareBtn = document.getElementById('shareBtn');
+        const maskScreen = document.getElementById('maskScreen');
+        const stageArea = document.getElementById('stageArea');
+
+        function initializeExperience() {
+            const cacheBuster = 'v=' + new Date().getTime();
+            frameOverlayImg.src = "https://i.ibb.co/BVWNVfjW/sem-fundo.png?" + cacheBuster;
+
+            const revealStage = () => {
+                maskScreen.style.opacity = '0';
+                setTimeout(() => {
+                    maskScreen.style.display = 'none';
+                    stageArea.classList.add('active');
+                }, 400);
+                startCamera(currentFacingMode);
+            };
+
+            frameOverlayImg.onload = revealStage;
+            frameOverlayImg.onerror = revealStage;
+
+            if (frameOverlayImg.complete && frameOverlayImg.naturalWidth !== 0) {
+                revealStage();
+            }
+        }
+
+        async function startCamera(facing) {
+            if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); }
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facing }, audio: false
+                });
+                video.srcObject = currentStream;
+                await video.play();
+            } catch (err) {
+                try {
+                    currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    video.srcObject = currentStream;
+                    await video.play();
+                } catch (e) { alert("Permita o acesso à câmara no seu navegador!"); }
+            }
+        }
+
+        function switchCam() {
+            currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+            startCamera(currentFacingMode);
+        }
+
+        function nextBadge() {
+            currentBadgeIndex = (currentBadgeIndex + 1) % badgeList.length;
+            const current = badgeList[currentBadgeIndex];
+            badgeTitleElem.style.opacity = '0';
+            badgeSubtitleElem.style.opacity = '0';
+            setTimeout(() => {
+                badgeTitleElem.innerText = current.title;
+                badgeSubtitleElem.innerText = current.subtitle;
+                badgeTitleElem.style.opacity = '1';
+                badgeSubtitleElem.style.opacity = '1';
+            }, 150);
+        }
+
+        function triggerFlashAndToast() {
+            flashEffect.style.opacity = '1';
+            setTimeout(() => { flashEffect.style.opacity = '0'; }, 150);
+            video.pause(); toastMsg.classList.add('show');
+        }
+
+        function retakePhoto() {
+            toastMsg.classList.remove('show');
+            video.play();
+        }
+
+        shareBtn.addEventListener('click', async () => {
+            if (!lastGeneratedBlob) return;
+            const file = new File([lastGeneratedBlob], `challenge-boxk-${Date.now()}.png`, { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: 'Challenge Box K 2026',
+                        text: 'Meu WOD pago no Challenge Box K 2026! 🔥',
+                        files: [file]
+                    });
+                } catch (err) {
+                    if (err.name !== 'AbortError') { console.log('Partilha cancelada', err); }
+                }
+            } else {
+                alert('O seu navegador não suporta partilha direta de ficheiros. Utilize o Safari ou Google Chrome.');
+            }
+            toastMsg.classList.remove('show');
+            video.play();
+        });
+
+        function takePhoto() {
+            triggerFlashAndToast();
+            const canvas = document.getElementById('photoCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1080; canvas.height = 1920;
+
+            const vRatio = video.videoWidth / video.videoHeight;
+            const cRatio = canvas.width / canvas.height;
+            let sWidth = video.videoWidth, sHeight = video.videoHeight, sx = 0, sy = 0;
+
+            if (vRatio > cRatio) {
+                sWidth = video.videoHeight * cRatio; sx = (video.videoWidth - sWidth) / 2;
+            } else {
+                sHeight = video.videoWidth / cRatio; sy = (video.videoHeight - sHeight) / 2;
+            }
+
+            ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+            const gradLeft = ctx.createRadialGradient(0, canvas.height / 2, 50, 0, canvas.height / 2, canvas.width * 0.5);
+            gradLeft.addColorStop(0, 'rgba(241, 102, 35, 0.55)'); gradLeft.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradLeft; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const gradRight = ctx.createRadialGradient(canvas.width, canvas.height / 2, 50, canvas.width, canvas.height / 2, canvas.width * 0.5);
+            gradRight.addColorStop(0, 'rgba(29, 91, 179, 0.6)'); gradRight.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradRight; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (frameOverlayImg && frameOverlayImg.complete && frameOverlayImg.naturalWidth !== 0) {
+                ctx.shadowColor = 'transparent';
+                ctx.drawImage(frameOverlayImg, 0, 0, canvas.width, canvas.height);
+            }
+
+            ctx.save();
+            const current = badgeList[currentBadgeIndex];
+            const titleFontSize = 90;
+            ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
+            ctx.textAlign = 'center';
+
+            const textGrad = ctx.createLinearGradient(140, 0, 940, 0);
+            textGrad.addColorStop(0, '#F16623'); textGrad.addColorStop(0.5, '#ffffff'); textGrad.addColorStop(1, '#3b82f6');
+
+            ctx.fillStyle = textGrad;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 5;
+            ctx.fillText(current.title, canvas.width / 2, 230);
+
+            const subFontSize = 38;
+            ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
+            ctx.fillStyle = '#f8fafc'; ctx.shadowBlur = 12;
+            ctx.fillText(current.subtitle, canvas.width / 2, 280);
+            ctx.restore();
+
+            ctx.shadowColor = 'transparent';
+            canvas.toBlob((blob) => {
+                lastGeneratedBlob = blob;
+            }, 'image/png', 1.0);
+        }
+    </script>
+</body>
+</html>
