@@ -305,14 +305,44 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v14';
-            const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
-            if (storedVersion !== APP_VERSION) {
-                localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
+            const APP_VERSION = '2026.11.24-v15';
+            const VERSION_KEY = 'challenge_boxk_app_ver';
+            const SYNC_FLAG = 'challenge_boxk_last_sync_ver';
+
+            async function clearBrowserCachesAndReload(targetVersion) {
+                localStorage.setItem(VERSION_KEY, targetVersion);
+                sessionStorage.setItem(SYNC_FLAG, targetVersion);
                 if ('caches' in window) {
-                    caches.keys().then(names => { names.forEach(name => { caches.delete(name); }); });
+                    try {
+                        const names = await caches.keys();
+                        await Promise.all(names.map(name => caches.delete(name)));
+                    } catch (e) {}
                 }
-                window.location.replace(window.location.pathname + '?v=' + Date.now());
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.location.replace(cleanUrl + '?v=' + encodeURIComponent(targetVersion) + '&t=' + Date.now());
+            }
+
+            const storedVersion = localStorage.getItem(VERSION_KEY);
+            if (storedVersion !== APP_VERSION) {
+                clearBrowserCachesAndReload(APP_VERSION);
+                return;
+            }
+
+            // Checagem silenciosa no servidor para capturar atualizações recentes sem cache
+            if (sessionStorage.getItem(SYNC_FLAG) !== APP_VERSION) {
+                sessionStorage.setItem(SYNC_FLAG, APP_VERSION);
+                const probeUrl = window.location.origin + window.location.pathname + '?live_check=' + Date.now();
+                fetch(probeUrl, { cache: 'no-store', headers: { 'Pragma': 'no-cache' } })
+                    .then(res => res.ok ? res.text() : null)
+                    .then(html => {
+                        if (!html) return;
+                        const match = html.match(/const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
+                        const remoteVersion = match ? match[1] : null;
+                        if (remoteVersion && remoteVersion !== APP_VERSION) {
+                            clearBrowserCachesAndReload(remoteVersion);
+                        }
+                    })
+                    .catch(() => {});
             }
         })();
 
