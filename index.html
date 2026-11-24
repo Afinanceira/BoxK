@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v12';
+            const APP_VERSION = '2026.11.24-v13';
             const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
             if (storedVersion !== APP_VERSION) {
                 localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
@@ -364,16 +364,16 @@
 
         async function startCamera(facing) {
             if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); }
-            const hdConstraints = {
+            const wideHdConstraints = {
                 video: {
                     facingMode: facing,
-                    width: { ideal: 1080 },
-                    height: { ideal: 1920 }
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
                 },
                 audio: false
             };
             try {
-                currentStream = await navigator.mediaDevices.getUserMedia(hdConstraints);
+                currentStream = await navigator.mediaDevices.getUserMedia(wideHdConstraints);
                 video.srcObject = currentStream;
                 await video.play();
             } catch (err) {
