@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v10';
+            const APP_VERSION = '2026.11.24-v11';
             const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
             if (storedVersion !== APP_VERSION) {
                 localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
@@ -343,7 +343,7 @@
 
         function initializeExperience() {
             const cacheBuster = 'v=' + new Date().getTime();
-            frameOverlayImg.src = "https://i.ibb.co/BVWNVfjW/sem-fundo.png?" + cacheBuster;
+            frameOverlayImg.src = "https://i.ibb.co/MypZxw74/sem-fundo.png?" + cacheBuster;
 
             const revealStage = () => {
                 maskScreen.style.opacity = '0';
@@ -375,7 +375,7 @@
                     currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                     video.srcObject = currentStream;
                     await video.play();
-                } catch (e) { alert("Permita o acesso à câmara no seu navegador!"); }
+                } catch (e) { alert("Permita o acesso à câmera no seu navegador!"); }
             }
         }
 
