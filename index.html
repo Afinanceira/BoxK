@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v11';
+            const APP_VERSION = '2026.11.24-v12';
             const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
             if (storedVersion !== APP_VERSION) {
                 localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
@@ -364,18 +364,35 @@
 
         async function startCamera(facing) {
             if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); }
+            const hdConstraints = {
+                video: {
+                    facingMode: facing,
+                    width: { ideal: 1080 },
+                    height: { ideal: 1920 }
+                },
+                audio: false
+            };
             try {
-                currentStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: facing }, audio: false
-                });
+                currentStream = await navigator.mediaDevices.getUserMedia(hdConstraints);
                 video.srcObject = currentStream;
                 await video.play();
             } catch (err) {
                 try {
-                    currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    currentStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: facing },
+                        audio: false
+                    });
                     video.srcObject = currentStream;
                     await video.play();
-                } catch (e) { alert("Permita o acesso à câmera no seu navegador!"); }
+                } catch (e) {
+                    try {
+                        currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                        video.srcObject = currentStream;
+                        await video.play();
+                    } catch (errFinal) {
+                        alert("Permita o acesso à câmera no seu navegador!");
+                    }
+                }
             }
         }
 
@@ -434,6 +451,8 @@
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
             canvas.width = 1080; canvas.height = 1920;
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
 
             const vRatio = video.videoWidth / video.videoHeight;
             const cRatio = canvas.width / canvas.height;
