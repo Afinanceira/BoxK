@@ -118,7 +118,7 @@
         @keyframes pulseL { 0% { opacity: 0.45; } 100% { opacity: 0.85; } }
         @keyframes pulseR { 0% { opacity: 0.85; } 100% { opacity: 0.45; } }
 
-        /* MOLDURA / SOBREPOSIÇÃO SEM FUNDO DO CHALLENGE BOX K */
+        /* MOLDURA / SOBREPOSIÇÃO SEM FUNDO DO CHALLENGE BOX K COM CONTRASTE LIMPO */
         .frame-overlay-img {
             position: absolute;
             top: 0; left: 0;
@@ -126,7 +126,7 @@
             object-fit: cover;
             pointer-events: none;
             z-index: 3;
-            filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.45));
+            filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, 0.78)) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.9));
         }
 
         .overlay {
@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v13';
+            const APP_VERSION = '2026.11.24-v14';
             const storedVersion = localStorage.getItem('challenge_boxk_app_ver');
             if (storedVersion !== APP_VERSION) {
                 localStorage.setItem('challenge_boxk_app_ver', APP_VERSION);
@@ -433,7 +433,7 @@
                 try {
                     await navigator.share({
                         title: 'Challenge Box K 2026',
-                        text: 'Challenge Box K 2026! 🔥',
+                        text: 'Meu WOD pago no Challenge Box K 2026! 🔥',
                         files: [file]
                     });
                 } catch (err) {
@@ -474,28 +474,43 @@
             gradRight.addColorStop(0, 'rgba(29, 91, 179, 0.6)'); gradRight.addColorStop(1, 'transparent');
             ctx.fillStyle = gradRight; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Realce discreto apenas na área inferior direita onde fica a marca, sem sujar a foto
+            const logoSpotGrad = ctx.createRadialGradient(
+                canvas.width * 0.82, canvas.height * 0.84, 30,
+                canvas.width * 0.82, canvas.height * 0.84, canvas.width * 0.34
+            );
+            logoSpotGrad.addColorStop(0, 'rgba(0, 0, 0, 0.42)');
+            logoSpotGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = logoSpotGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             if (frameOverlayImg && frameOverlayImg.complete && frameOverlayImg.naturalWidth !== 0) {
-                ctx.shadowColor = 'transparent';
+                ctx.save();
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+                ctx.shadowBlur = 14;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 4;
                 ctx.drawImage(frameOverlayImg, 0, 0, canvas.width, canvas.height);
+                ctx.restore();
             }
 
             ctx.save();
             const current = badgeList[currentBadgeIndex];
-            const titleFontSize = 90;
+            const titleFontSize = 86;
             ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
             ctx.textAlign = 'center';
 
-            const textGrad = ctx.createLinearGradient(140, 0, 940, 0);
+            const textGrad = ctx.createLinearGradient(160, 0, 920, 0);
             textGrad.addColorStop(0, '#F16623'); textGrad.addColorStop(0.5, '#ffffff'); textGrad.addColorStop(1, '#3b82f6');
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 5;
-            ctx.fillText(current.title, canvas.width / 2, 230);
+            ctx.fillText(current.title, canvas.width / 2, 235);
 
             const subFontSize = 38;
             ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
             ctx.fillStyle = '#f8fafc'; ctx.shadowBlur = 12;
-            ctx.fillText(current.subtitle, canvas.width / 2, 280);
+            ctx.fillText(current.subtitle, canvas.width / 2, 285);
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
