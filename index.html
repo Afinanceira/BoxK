@@ -61,7 +61,7 @@
             letter-spacing: 3px;
             margin-bottom: 12px;
             line-height: 1.1;
-            background: linear-gradient(90deg, #F16623 0%, #ffffff 50%, #3b82f6 100%);
+            background: linear-gradient(90deg, #F16623 0%, #ff9e44 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -144,9 +144,9 @@
             justify-content: center; margin-top: 8px;
             pointer-events: auto; cursor: pointer;
             padding: 8px 16px; border-radius: 16px;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.42);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.16);
             transition: all 0.2s;
         }
         .badge-card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
@@ -155,27 +155,27 @@
             font-size: clamp(34px, 8.5vw, 48px);
             font-weight: 700; line-height: 0.9;
             letter-spacing: 2px; text-transform: uppercase;
-            background: linear-gradient(90deg, #F16623 0%, #ffffff 50%, #3b82f6 100%);
+            background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.95));
+            filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.98));
             transition: opacity 0.2s ease, transform 0.2s ease;
             display: flex; align-items: center; gap: 8px;
         }
 
         .arrow-indicator {
             font-size: 26px;
-            color: #cbd5e1;
-            -webkit-text-fill-color: #cbd5e1;
-            opacity: 0.85;
+            color: #e2e8f0;
+            -webkit-text-fill-color: #e2e8f0;
+            opacity: 0.9;
         }
 
         .badge-subtitle {
             font-size: clamp(15px, 4vw, 20px);
             font-weight: 700; letter-spacing: 4px;
-            color: #f8fafc; text-transform: uppercase;
+            color: #ffffff; text-transform: uppercase;
             margin-top: 6px;
-            filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.95));
+            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.98));
         }
 
         #flashEffect {
@@ -305,7 +305,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v16';
+            const APP_VERSION = '2026.11.24-v19';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const SYNC_FLAG = 'challenge_boxk_last_sync_ver';
 
@@ -352,7 +352,12 @@
         const badgeList = [
             { title: "SOBREVIVI A PROVA", subtitle: "CHALLENGE BOX K 2026" },
             { title: "MODO K ATIVADO", subtitle: "CHALLENGE BOX K 2026" },
-            { title: "NO LIMITE", subtitle: "CHALLENGE BOX K 2026" }
+            { title: "NO LIMITE", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "VIM PARA TORCER", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "EU FUI", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "EU TAVA", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "TORCIDA OFICIAL", subtitle: "CHALLENGE BOX K 2026" },
+            { title: "NA VIBRACAO", subtitle: "CHALLENGE BOX K 2026" }
         ];
 
         let currentBadgeIndex = 0;
@@ -445,13 +450,13 @@
 
         shareBtn.addEventListener('click', async () => {
             if (!lastGeneratedBlob) return;
-            const file = new File([lastGeneratedBlob], `challenge-boxk-${Date.now()}.png`, { type: 'image/png' });
+            const file = new File([lastGeneratedBlob], `challenge-boxk-${Date.now()}.jpg`, { type: 'image/jpeg' });
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
                         title: 'Challenge Box K 2026',
-                        text: 'Challenge Box K 2026! 🔥',
+                        text: 'Meu WOD pago no Challenge Box K 2026! 🔥',
                         files: [file]
                     });
                 } catch (err) {
@@ -518,22 +523,35 @@
             ctx.textAlign = 'center';
 
             const textGrad = ctx.createLinearGradient(160, 0, 920, 0);
-            textGrad.addColorStop(0, '#F16623'); textGrad.addColorStop(0.5, '#ffffff'); textGrad.addColorStop(1, '#3b82f6');
+            textGrad.addColorStop(0, '#F16623');
+            textGrad.addColorStop(0.48, '#ff9d3b');
+            textGrad.addColorStop(1, '#2563eb');
+
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.92)';
+            ctx.strokeText(current.title, canvas.width / 2, 235);
 
             ctx.fillStyle = textGrad;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 5;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetY = 4;
             ctx.fillText(current.title, canvas.width / 2, 235);
 
             const subFontSize = 38;
             ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
-            ctx.fillStyle = '#f8fafc'; ctx.shadowBlur = 12;
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+            ctx.strokeText(current.subtitle, canvas.width / 2, 285);
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowBlur = 10;
             ctx.fillText(current.subtitle, canvas.width / 2, 285);
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
             canvas.toBlob((blob) => {
                 lastGeneratedBlob = blob;
-            }, 'image/png', 1.0);
+            }, 'image/jpeg', 0.95);
         }
     </script>
 </body>
