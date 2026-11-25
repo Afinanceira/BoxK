@@ -142,40 +142,91 @@
             text-align: center; display: flex;
             flex-direction: column; align-items: center;
             justify-content: center; margin-top: 8px;
-            pointer-events: auto; cursor: pointer;
-            padding: 8px 16px; border-radius: 16px;
-            background: rgba(0, 0, 0, 0.42);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            transition: all 0.2s;
+            pointer-events: auto;
+            padding: 10px 14px; border-radius: 18px;
+            background: rgba(9, 13, 22, 0.55);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
         }
-        .badge-card:active { background: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-arrow {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
+            background: linear-gradient(135deg, rgba(241, 102, 35, 0.32), rgba(37, 99, 235, 0.32));
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+            transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-arrow:hover {
+            border-color: #ff9d3b;
+            background: linear-gradient(135deg, rgba(241, 102, 35, 0.55), rgba(37, 99, 235, 0.55));
+        }
+
+        .btn-arrow:active {
+            transform: scale(0.88);
+            background: rgba(241, 102, 35, 0.75);
+        }
+
+        .badge-title-wrap {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 10px;
+            transition: transform 0.15s ease;
+        }
+
+        .badge-title-wrap:active {
+            transform: scale(0.97);
+        }
 
         .badge-title {
-            font-size: clamp(34px, 8.5vw, 48px);
-            font-weight: 700; line-height: 0.9;
+            font-size: clamp(32px, 8vw, 46px);
+            font-weight: 700; line-height: 0.92;
             letter-spacing: 2px; text-transform: uppercase;
             background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.98));
             transition: opacity 0.2s ease, transform 0.2s ease;
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        .arrow-indicator {
-            font-size: 26px;
-            color: #e2e8f0;
-            -webkit-text-fill-color: #e2e8f0;
-            opacity: 0.9;
+            display: block;
         }
 
         .badge-subtitle {
-            font-size: clamp(15px, 4vw, 20px);
+            font-size: clamp(14px, 3.8vw, 19px);
             font-weight: 700; letter-spacing: 4px;
             color: #ffffff; text-transform: uppercase;
-            margin-top: 6px;
+            margin-top: 5px;
             filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.98));
+        }
+
+        .badge-counter {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fbbf24;
+            margin-top: 4px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
         }
 
         #flashEffect {
@@ -279,13 +330,16 @@
         </div>
 
         <div class="overlay">
-            <div class="badge-card" onclick="nextBadge()" title="Toque para mudar frase">
-                <div class="badge-title">
-                    <span class="arrow-indicator">‹</span>
-                    <span id="badgeTitle">SOBREVIVI A PROVA</span>
-                    <span class="arrow-indicator">›</span>
+            <div class="badge-card">
+                <div class="badge-row">
+                    <button type="button" class="btn-arrow" onclick="prevBadge(event)" title="Frase anterior" aria-label="Frase anterior">‹</button>
+                    <div class="badge-title-wrap" onclick="nextBadge(event)" title="Toque para mudar frase">
+                        <span id="badgeTitle" class="badge-title">SOBREVIVI A PROVA</span>
+                    </div>
+                    <button type="button" class="btn-arrow" onclick="nextBadge(event)" title="Próxima frase" aria-label="Próxima frase">›</button>
                 </div>
                 <span id="badgeSubtitle" class="badge-subtitle">CHALLENGE BOX K 2026</span>
+                <span id="badgeCounter" class="badge-counter">1 / 8 • TOQUE NAS SETAS</span>
             </div>
             <div></div>
         </div>
@@ -305,7 +359,7 @@
 
     <script>
         (function() {
-            const APP_VERSION = '2026.11.24-v19';
+            const APP_VERSION = '2026.11.25-v20';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const SYNC_FLAG = 'challenge_boxk_last_sync_ver';
 
@@ -368,6 +422,7 @@
         const video = document.getElementById('webcam');
         const badgeTitleElem = document.getElementById('badgeTitle');
         const badgeSubtitleElem = document.getElementById('badgeSubtitle');
+        const badgeCounterElem = document.getElementById('badgeCounter');
         const frameOverlayImg = document.getElementById('frameOverlayImg');
         const flashEffect = document.getElementById('flashEffect');
         const toastMsg = document.getElementById('toastMsg');
@@ -424,17 +479,27 @@
             startCamera(currentFacingMode);
         }
 
-        function nextBadge() {
-            currentBadgeIndex = (currentBadgeIndex + 1) % badgeList.length;
+        function applyBadge(newIndex, event) {
+            if (event) event.stopPropagation();
+            currentBadgeIndex = (newIndex + badgeList.length) % badgeList.length;
             const current = badgeList[currentBadgeIndex];
             badgeTitleElem.style.opacity = '0';
             badgeSubtitleElem.style.opacity = '0';
             setTimeout(() => {
                 badgeTitleElem.innerText = current.title;
                 badgeSubtitleElem.innerText = current.subtitle;
+                badgeCounterElem.innerText = `${currentBadgeIndex + 1} / ${badgeList.length} • TOQUE NAS SETAS`;
                 badgeTitleElem.style.opacity = '1';
                 badgeSubtitleElem.style.opacity = '1';
-            }, 150);
+            }, 130);
+        }
+
+        function nextBadge(event) {
+            applyBadge(currentBadgeIndex + 1, event);
+        }
+
+        function prevBadge(event) {
+            applyBadge(currentBadgeIndex - 1, event);
         }
 
         function triggerFlashAndToast() {
