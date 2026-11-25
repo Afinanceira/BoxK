@@ -14,9 +14,6 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
         }
         html, body {
             width: 100%; height: 100%; height: 100dvh;
@@ -31,10 +28,8 @@
             width: 100vw; height: 100vh; height: 100dvh;
             max-width: 430px; max-height: 900px;
             background: #000; overflow: hidden;
-            display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center;
             opacity: 0;
-            transition: opacity 0.35s ease;
+            transition: opacity 0.3s ease;
         }
 
         .stage.active {
@@ -54,14 +49,14 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, #172554 0%, #090d16 100%);
-            z-index: 120;
+            z-index: 2000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 30px;
             text-align: center;
-            transition: opacity 0.35s ease;
+            transition: opacity 0.3s ease;
         }
 
         .mask-title {
@@ -96,7 +91,6 @@
             letter-spacing: 2px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(241, 102, 35, 0.45);
-            transition: transform 0.2s, box-shadow 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -104,7 +98,6 @@
 
         .btn-load-filter:active {
             transform: scale(0.95);
-            box-shadow: 0 4px 12px rgba(241, 102, 35, 0.25);
         }
 
         /* FUMAÇA ANIMADA NAS LATERAIS - LARANJA E AZUL */
@@ -138,76 +131,67 @@
             filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, 0.78)) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.9));
         }
 
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 80; pointer-events: none;
-            display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center;
-            padding: max(56px, env(safe-area-inset-top) + 22px) 15px max(95px, env(safe-area-inset-bottom)) 15px;
-        }
-
+        /* CARD DE FRASES INDEPENDENTE NO TOPO (SEM ANCESTRAL COM pointer-events: none) */
         .badge-card {
-            position: relative;
-            z-index: 90;
+            position: absolute;
+            top: max(54px, env(safe-area-inset-top) + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 28px);
+            max-width: 390px;
+            z-index: 999;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 8px;
-            pointer-events: auto;
-            padding: 10px 14px;
+            padding: 10px 12px;
             border-radius: 18px;
-            background: rgba(9, 13, 22, 0.86);
-            border: 1.5px solid rgba(255, 255, 255, 0.28);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.78);
+            background: rgba(9, 13, 22, 0.88);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.82);
         }
 
         .badge-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            justify-content: space-between;
+            gap: 8px;
             width: 100%;
         }
 
         .btn-arrow {
-            position: relative;
-            z-index: 95;
             flex-shrink: 0;
-            width: 42px;
-            height: 42px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
-            border: 1.5px solid #ff9d3b;
+            border: 2px solid #ff9d3b;
             background: linear-gradient(135deg, #F16623, #1d4ed8);
             color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 26px;
+            font-family: Arial, sans-serif;
+            font-size: 28px;
             font-weight: 900;
             line-height: 1;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            pointer-events: auto;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
-            transition: transform 0.1s ease, filter 0.1s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+            touch-action: manipulation;
         }
 
         .btn-arrow:active {
             transform: scale(0.86);
-            filter: brightness(1.2);
+            filter: brightness(1.25);
         }
 
         .badge-title-wrap {
-            position: relative;
-            z-index: 92;
+            flex: 1;
+            min-width: 0;
             cursor: pointer;
-            pointer-events: auto;
-            padding: 2px 6px;
+            padding: 4px 4px;
             border-radius: 10px;
-            transition: transform 0.1s ease;
+            touch-action: manipulation;
         }
 
         .badge-title-wrap:active {
@@ -215,9 +199,11 @@
         }
 
         .badge-title {
-            font-size: clamp(32px, 8vw, 46px);
-            font-weight: 700; line-height: 0.92;
-            letter-spacing: 2px; text-transform: uppercase;
+            font-size: clamp(30px, 7.6vw, 44px);
+            font-weight: 700;
+            line-height: 0.94;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -227,9 +213,11 @@
 
         .badge-subtitle {
             font-size: clamp(14px, 3.8vw, 19px);
-            font-weight: 700; letter-spacing: 4px;
-            color: #ffffff; text-transform: uppercase;
-            margin-top: 5px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-top: 4px;
             filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.98));
         }
 
@@ -239,29 +227,34 @@
             font-weight: 700;
             letter-spacing: 1px;
             color: #fbbf24;
-            margin-top: 4px;
+            margin-top: 3px;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
         }
 
         #flashEffect {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; z-index: 100; opacity: 0; pointer-events: none;
+            background: #fff; z-index: 1200; opacity: 0; pointer-events: none;
             transition: opacity 0.15s ease-out;
         }
 
         #toastMsg {
-            position: absolute; top: 75px; left: 50%;
+            position: absolute; top: 175px; left: 50%;
             transform: translateX(-50%) translateY(-25px);
             background: rgba(15, 15, 25, 0.96); color: #fff;
             padding: 16px 24px; border-radius: 20px;
             font-family: 'Segoe UI', sans-serif; font-size: 13px; font-weight: bold;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.85); z-index: 110; opacity: 0;
-            transition: all 0.3s ease; pointer-events: auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.85); z-index: 1500; opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
             display: flex; flex-direction: column; align-items: center;
             gap: 12px; border: 1px solid rgba(255,255,255,0.25); text-align: center;
         }
 
-        #toastMsg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        #toastMsg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
 
         .toast-actions {
             display: flex; gap: 10px; width: 100%; justify-content: center;
@@ -280,35 +273,33 @@
             color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 8px 16px; border-radius: 12px; font-weight: bold; font-size: 12px;
             cursor: pointer; display: flex; align-items: center; gap: 6px;
-            transition: background 0.2s;
         }
-        .btn-retake:active { background: rgba(255, 255, 255, 0.3); }
 
         .controls-bar {
             position: absolute; bottom: max(20px, env(safe-area-inset-bottom));
             left: 50%; transform: translateX(-50%); width: 65%; max-width: 260px;
             display: flex; justify-content: space-around; align-items: center;
-            padding: 10px 15px; background: rgba(12, 12, 18, 0.85);
+            padding: 10px 15px; background: rgba(12, 12, 18, 0.88);
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 40px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
-            z-index: 90; pointer-events: auto;
+            z-index: 999;
         }
 
         .btn-icon {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff; width: 44px; height: 44px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; touch-action: manipulation;
         }
 
-        .btn-icon svg { width: 20px; height: 20px; fill: #ffffff; transition: transform 0.3s ease; }
+        .btn-icon svg { width: 20px; height: 20px; fill: #ffffff; }
         .btn-icon:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.22); }
 
         .btn-shutter {
             background: #ffffff; width: 62px; height: 62px; border-radius: 50%;
             border: 4px solid rgba(241, 102, 35, 0.95); display: flex;
             align-items: center; justify-content: center; cursor: pointer;
-            box-shadow: 0 0 24px rgba(241, 102, 35, 0.6); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 24px rgba(241, 102, 35, 0.6); touch-action: manipulation;
         }
 
         .btn-shutter svg { width: 26px; height: 26px; fill: #1d4ed8; }
@@ -320,7 +311,7 @@
     <div id="maskScreen">
         <h1 class="mask-title">CHALLENGE BOX K 2026</h1>
         <p class="mask-desc">Toque no botão abaixo para carregar a versão mais recente do seu filtro oficial.</p>
-        <button id="btnLoadFilter" type="button" class="btn-load-filter">
+        <button type="button" class="btn-load-filter" onclick="initializeExperience()">
             <span>⚡</span> Carregar Filtro
         </button>
     </div>
@@ -333,93 +324,79 @@
 
         <img id="frameOverlayImg" class="frame-overlay-img" crossorigin="anonymous" alt="Challenge Box K 2026">
 
+        <div class="badge-card" id="badgeCard">
+            <div class="badge-row">
+                <button type="button" class="btn-arrow" onclick="prevBadge()" title="Frase anterior" aria-label="Frase anterior">&#8249;</button>
+                <div class="badge-title-wrap" onclick="nextBadge()" title="Toque para mudar frase">
+                    <span id="badgeTitle" class="badge-title">SOBREVIVI A PROVA</span>
+                </div>
+                <button type="button" class="btn-arrow" onclick="nextBadge()" title="Próxima frase" aria-label="Próxima frase">&#8250;</button>
+            </div>
+            <span id="badgeSubtitle" class="badge-subtitle">CHALLENGE BOX K 2026</span>
+            <span id="badgeCounter" class="badge-counter">1 / 8 • TOQUE NAS SETAS</span>
+        </div>
+
         <div id="flashEffect"></div>
 
         <div id="toastMsg">
             <span>🔥 Foto capturada com sucesso!</span>
             <div class="toast-actions">
-                <button type="button" class="btn-share-native" id="shareBtn">📤 Partilhar</button>
-                <button type="button" class="btn-retake" id="retakeBtn">🔄 Tirar Outra</button>
+                <button type="button" class="btn-share-native" id="shareBtn" onclick="sharePhoto()">📤 Partilhar</button>
+                <button type="button" class="btn-retake" onclick="retakePhoto()">🔄 Tirar Outra</button>
             </div>
-        </div>
-
-        <div class="overlay">
-            <div class="badge-card" id="badgeCard">
-                <div class="badge-row">
-                    <button type="button" class="btn-arrow" id="btnPrevBadge" title="Frase anterior" aria-label="Frase anterior">‹</button>
-                    <div class="badge-title-wrap" id="badgeTitleWrap" title="Toque para mudar frase">
-                        <span id="badgeTitle" class="badge-title">SOBREVIVI A PROVA</span>
-                    </div>
-                    <button type="button" class="btn-arrow" id="btnNextBadge" title="Próxima frase" aria-label="Próxima frase">›</button>
-                </div>
-                <span id="badgeSubtitle" class="badge-subtitle">CHALLENGE BOX K 2026</span>
-                <span id="badgeCounter" class="badge-counter">1 / 8 • TOQUE NAS SETAS</span>
-            </div>
-            <div></div>
         </div>
 
         <canvas id="photoCanvas" style="display: none;"></canvas>
 
         <div class="controls-bar">
-            <button type="button" class="btn-icon" id="btnSwitchCam" title="Inverter Câmera">
+            <button type="button" class="btn-icon" onclick="switchCam()" title="Inverter Câmera">
                 <svg viewBox="0 0 24 24"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
             </button>
 
-            <button type="button" class="btn-shutter" id="btnTakePhoto" title="Tirar Foto">
+            <button type="button" class="btn-shutter" onclick="takePhoto()" title="Tirar Foto">
                 <svg viewBox="0 0 24 24"><path d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm10-3h-3.17L17 4H7L5.17 6H2v14h20V6zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
             </button>
         </div>
     </div>
 
     <script>
-        (function() {
-            const APP_VERSION = '2026.11.25-v22';
+        (async function purgeOldCacheOnOpen() {
+            const APP_VERSION = '2026.11.25-v24';
             const VERSION_KEY = 'challenge_boxk_app_ver';
-            const SYNC_FLAG = 'challenge_boxk_last_sync_ver';
-
-            async function clearBrowserCachesAndReload(targetVersion) {
-                try {
-                    localStorage.setItem(VERSION_KEY, targetVersion);
-                    sessionStorage.setItem(SYNC_FLAG, targetVersion);
-                } catch (e) {}
-                if ('caches' in window) {
-                    try {
-                        const names = await caches.keys();
-                        await Promise.all(names.map(name => caches.delete(name)));
-                    } catch (e) {}
-                }
-                const cleanUrl = window.location.origin + window.location.pathname;
-                window.location.replace(cleanUrl + '?v=' + encodeURIComponent(targetVersion) + '&t=' + Date.now());
-            }
+            const RELOAD_GUARD_KEY = 'challenge_boxk_reloaded_' + APP_VERSION;
 
             try {
+                const alreadyReloadedThisSession = sessionStorage.getItem(RELOAD_GUARD_KEY) === '1';
                 const storedVersion = localStorage.getItem(VERSION_KEY);
-                if (storedVersion !== APP_VERSION) {
-                    clearBrowserCachesAndReload(APP_VERSION);
-                    return;
-                }
 
-                if (sessionStorage.getItem(SYNC_FLAG) !== APP_VERSION) {
-                    sessionStorage.setItem(SYNC_FLAG, APP_VERSION);
-                    const probeUrl = window.location.origin + window.location.pathname + '?live_check=' + Date.now();
-                    fetch(probeUrl, { cache: 'no-store', headers: { 'Pragma': 'no-cache' } })
-                        .then(res => res.ok ? res.text() : null)
-                        .then(html => {
-                            if (!html) return;
-                            const match = html.match(/const\s+APP_VERSION\s*=\s*['"]([^'"]+)['"]/);
-                            const remoteVersion = match ? match[1] : null;
-                            if (remoteVersion && remoteVersion !== APP_VERSION) {
-                                clearBrowserCachesAndReload(remoteVersion);
+                if (!alreadyReloadedThisSession && storedVersion !== APP_VERSION) {
+                    sessionStorage.setItem(RELOAD_GUARD_KEY, '1');
+                    localStorage.setItem(VERSION_KEY, APP_VERSION);
+
+                    try {
+                        Object.keys(sessionStorage).forEach(function(key) {
+                            if (key !== RELOAD_GUARD_KEY && key.indexOf('challenge_boxk_') === 0) {
+                                sessionStorage.removeItem(key);
                             }
-                        })
-                        .catch(() => {});
+                        });
+                    } catch (e) {}
+
+                    if ('caches' in window && typeof caches.keys === 'function') {
+                        try {
+                            const cacheNames = await caches.keys();
+                            await Promise.all(cacheNames.map(function(name) {
+                                return caches.delete(name);
+                            }));
+                        } catch (e) {}
+                    }
+
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    window.location.replace(cleanUrl + '?v=' + encodeURIComponent(APP_VERSION) + '&nocache=' + Date.now());
+                } else {
+                    localStorage.setItem(VERSION_KEY, APP_VERSION);
                 }
             } catch (e) {}
         })();
-
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) { window.location.reload(true); }
-        });
 
         const badgeList = [
             { title: "SOBREVIVI A PROVA", subtitle: "CHALLENGE BOX K 2026" },
@@ -436,47 +413,72 @@
         let currentFacingMode = 'user';
         let currentStream = null;
         let lastGeneratedBlob = null;
-        let lastBadgeActionTime = 0;
 
-        const video = document.getElementById('webcam');
-        const badgeTitleElem = document.getElementById('badgeTitle');
-        const badgeSubtitleElem = document.getElementById('badgeSubtitle');
-        const badgeCounterElem = document.getElementById('badgeCounter');
-        const frameOverlayImg = document.getElementById('frameOverlayImg');
-        const flashEffect = document.getElementById('flashEffect');
-        const toastMsg = document.getElementById('toastMsg');
-        const shareBtn = document.getElementById('shareBtn');
-        const retakeBtn = document.getElementById('retakeBtn');
-        const btnLoadFilter = document.getElementById('btnLoadFilter');
-        const btnPrevBadge = document.getElementById('btnPrevBadge');
-        const btnNextBadge = document.getElementById('btnNextBadge');
-        const badgeTitleWrap = document.getElementById('badgeTitleWrap');
-        const btnSwitchCam = document.getElementById('btnSwitchCam');
-        const btnTakePhoto = document.getElementById('btnTakePhoto');
-        const maskScreen = document.getElementById('maskScreen');
-        const stageArea = document.getElementById('stageArea');
+        function renderBadge() {
+            const total = badgeList.length;
+            currentBadgeIndex = ((currentBadgeIndex % total) + total) % total;
+            const current = badgeList[currentBadgeIndex];
+            const titleEl = document.getElementById('badgeTitle');
+            const subEl = document.getElementById('badgeSubtitle');
+            const countEl = document.getElementById('badgeCounter');
+            if (titleEl) titleEl.textContent = current.title;
+            if (subEl) subEl.textContent = current.subtitle;
+            if (countEl) countEl.textContent = (currentBadgeIndex + 1) + ' / ' + total + ' • TOQUE NAS SETAS';
+        }
+
+        function nextBadge() {
+            currentBadgeIndex += 1;
+            renderBadge();
+        }
+
+        function prevBadge() {
+            currentBadgeIndex -= 1;
+            renderBadge();
+        }
+
+        (function enableBadgeSwipe() {
+            const card = document.getElementById('badgeCard');
+            if (!card) return;
+            let startX = null;
+            card.addEventListener('touchstart', function(e) {
+                if (e.touches && e.touches.length === 1) startX = e.touches[0].clientX;
+            }, { passive: true });
+            card.addEventListener('touchend', function(e) {
+                if (startX === null || !e.changedTouches || !e.changedTouches.length) return;
+                const diffX = e.changedTouches[0].clientX - startX;
+                startX = null;
+                if (Math.abs(diffX) > 35) {
+                    if (diffX < 0) nextBadge();
+                    else prevBadge();
+                }
+            }, { passive: true });
+        })();
 
         function initializeExperience() {
-            const cacheBuster = 'v=' + new Date().getTime();
+            const frameOverlayImg = document.getElementById('frameOverlayImg');
+            const maskScreen = document.getElementById('maskScreen');
+            const stageArea = document.getElementById('stageArea');
+            const cacheBuster = 'v=' + Date.now();
+
             if (frameOverlayImg) {
                 frameOverlayImg.src = "https://i.ibb.co/MypZxw74/sem-fundo.png?" + cacheBuster;
             }
 
             let revealed = false;
-            const revealStage = () => {
+            function revealStage() {
                 if (revealed) return;
                 revealed = true;
                 if (maskScreen) {
                     maskScreen.style.opacity = '0';
-                    setTimeout(() => {
+                    setTimeout(function() {
                         maskScreen.style.display = 'none';
                         if (stageArea) stageArea.classList.add('active');
-                    }, 350);
+                    }, 300);
                 } else if (stageArea) {
                     stageArea.classList.add('active');
                 }
                 startCamera(currentFacingMode);
-            };
+            }
 
             if (frameOverlayImg) {
                 frameOverlayImg.onload = revealStage;
@@ -487,16 +489,17 @@
             } else {
                 revealStage();
             }
-            setTimeout(revealStage, 900);
+            setTimeout(revealStage, 800);
         }
 
         async function startCamera(facing) {
+            const video = document.getElementById('webcam');
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 alert("Seu navegador não suporta acesso à câmera neste contexto.");
                 return;
             }
             if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
+                currentStream.getTracks().forEach(function(track) { track.stop(); });
             }
             const attempts = [
                 { video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false },
@@ -506,17 +509,15 @@
                 { video: true, audio: false }
             ];
 
-            for (const constraints of attempts) {
+            for (let i = 0; i < attempts.length; i++) {
                 try {
-                    currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                    currentStream = await navigator.mediaDevices.getUserMedia(attempts[i]);
                     if (video) {
                         video.srcObject = currentStream;
-                        await video.play().catch(() => {});
+                        await video.play().catch(function() {});
                     }
                     return;
-                } catch (err) {
-                    continue;
-                }
+                } catch (err) {}
             }
             alert("Permita o acesso à câmera no seu navegador!");
         }
@@ -526,96 +527,48 @@
             startCamera(currentFacingMode);
         }
 
-        function renderBadge() {
-            const total = badgeList.length;
-            currentBadgeIndex = ((currentBadgeIndex % total) + total) % total;
-            const current = badgeList[currentBadgeIndex];
-            if (badgeTitleElem) badgeTitleElem.textContent = current.title;
-            if (badgeSubtitleElem) badgeSubtitleElem.textContent = current.subtitle;
-            if (badgeCounterElem) {
-                badgeCounterElem.textContent = `${currentBadgeIndex + 1} / ${total} • TOQUE NAS SETAS`;
-            }
-        }
-
-        function stepBadge(delta) {
-            const now = Date.now();
-            if (now - lastBadgeActionTime < 160) return;
-            lastBadgeActionTime = now;
-            currentBadgeIndex += delta;
-            renderBadge();
-        }
-
-        function bindInstantTap(element, delta) {
-            if (!element) return;
-            element.addEventListener('pointerdown', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                stepBadge(delta);
-            }, { passive: false });
-            element.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                stepBadge(delta);
-            });
-        }
-
-        bindInstantTap(btnPrevBadge, -1);
-        bindInstantTap(btnNextBadge, 1);
-        bindInstantTap(badgeTitleWrap, 1);
-
-        if (btnLoadFilter) {
-            btnLoadFilter.addEventListener('click', initializeExperience);
-        }
-        if (btnSwitchCam) {
-            btnSwitchCam.addEventListener('click', switchCam);
-        }
-        if (btnTakePhoto) {
-            btnTakePhoto.addEventListener('click', takePhoto);
-        }
-        if (retakeBtn) {
-            retakeBtn.addEventListener('click', retakePhoto);
-        }
-
         function triggerFlashAndToast() {
+            const flashEffect = document.getElementById('flashEffect');
+            const video = document.getElementById('webcam');
+            const toastMsg = document.getElementById('toastMsg');
             if (flashEffect) {
                 flashEffect.style.opacity = '1';
-                setTimeout(() => { flashEffect.style.opacity = '0'; }, 150);
+                setTimeout(function() { flashEffect.style.opacity = '0'; }, 150);
             }
             if (video && typeof video.pause === 'function') video.pause();
             if (toastMsg) toastMsg.classList.add('show');
         }
 
         function retakePhoto() {
+            const toastMsg = document.getElementById('toastMsg');
+            const video = document.getElementById('webcam');
             if (toastMsg) toastMsg.classList.remove('show');
-            if (video && typeof video.play === 'function') video.play().catch(() => {});
+            if (video && typeof video.play === 'function') video.play().catch(function() {});
         }
 
-        if (shareBtn) {
-            shareBtn.addEventListener('click', async () => {
-                if (!lastGeneratedBlob) return;
-                const file = new File([lastGeneratedBlob], `challenge-boxk-${Date.now()}.jpg`, { type: 'image/jpeg' });
+        async function sharePhoto() {
+            if (!lastGeneratedBlob) return;
+            const file = new File([lastGeneratedBlob], 'challenge-boxk-' + Date.now() + '.jpg', { type: 'image/jpeg' });
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            title: 'Challenge Box K 2026',
-                            text: 'Meu WOD pago no Challenge Box K 2026! 🔥',
-                            files: [file]
-                        });
-                    } catch (err) {
-                        if (err.name !== 'AbortError') { console.log('Partilha cancelada', err); }
-                    }
-                } else {
-                    alert('O seu navegador não suporta partilha direta de ficheiros. Utilize o Safari ou Google Chrome.');
-                }
-                if (toastMsg) toastMsg.classList.remove('show');
-                if (video && typeof video.play === 'function') video.play().catch(() => {});
-            });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: 'Challenge Box K 2026',
+                        text: 'Meu WOD pago no Challenge Box K 2026! 🔥',
+                        files: [file]
+                    });
+                } catch (err) {}
+            } else {
+                alert('O seu navegador não suporta partilha direta de ficheiros. Utilize o Safari ou Google Chrome.');
+            }
+            retakePhoto();
         }
 
         function takePhoto() {
             triggerFlashAndToast();
             const canvas = document.getElementById('photoCanvas');
+            const video = document.getElementById('webcam');
+            const frameOverlayImg = document.getElementById('frameOverlayImg');
             if (!canvas || !video || !video.videoWidth || !video.videoHeight) return;
 
             const ctx = canvas.getContext('2d');
@@ -665,7 +618,7 @@
             ctx.save();
             const current = badgeList[currentBadgeIndex];
             const titleFontSize = 86;
-            ctx.font = `700 ${titleFontSize}px "Teko", sans-serif`;
+            ctx.font = '700 ' + titleFontSize + 'px "Teko", sans-serif';
             ctx.textAlign = 'center';
 
             const textGrad = ctx.createLinearGradient(160, 0, 920, 0);
@@ -685,7 +638,7 @@
             ctx.fillText(current.title, canvas.width / 2, 235);
 
             const subFontSize = 38;
-            ctx.font = `700 ${subFontSize}px "Teko", sans-serif`;
+            ctx.font = '700 ' + subFontSize + 'px "Teko", sans-serif';
             ctx.lineWidth = 4;
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
             ctx.strokeText(current.subtitle, canvas.width / 2, 285);
@@ -695,7 +648,7 @@
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
-            canvas.toBlob((blob) => {
+            canvas.toBlob(function(blob) {
                 lastGeneratedBlob = blob;
             }, 'image/jpeg', 0.95);
         }
