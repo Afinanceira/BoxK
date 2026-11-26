@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Challenge Box K 2026 - Filtro Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&subset=latin,latin-ext&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&subset=latin,latin-ext&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -18,7 +18,7 @@
         html, body {
             width: 100%; height: 100%; height: 100dvh;
             background: #000; color: #fff;
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
@@ -60,11 +60,12 @@
         }
 
         .mask-title {
-            font-size: 42px;
+            font-size: 36px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             margin-bottom: 12px;
-            line-height: 1.1;
+            line-height: 1.15;
             background: linear-gradient(90deg, #F16623 0%, #ff9e44 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -83,12 +84,13 @@
             background: linear-gradient(135deg, #F16623 0%, #ea580c 50%, #1d4ed8 100%);
             color: #fff;
             border: none;
-            padding: 14px 32px;
+            padding: 14px 30px;
             border-radius: 40px;
-            font-family: 'Oswald', sans-serif;
-            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             box-shadow: 0 8px 25px rgba(241, 102, 35, 0.45);
             display: inline-flex;
@@ -100,27 +102,7 @@
             transform: scale(0.95);
         }
 
-        /* FUMAÇA ANIMADA NAS LATERAIS - LARANJA E AZUL */
-        .smoke-left {
-            position: absolute; top: 0; left: -25%;
-            width: 65%; height: 100%;
-            background: radial-gradient(circle at 10% 50%, rgba(241, 102, 35, 0.55), transparent 75%);
-            filter: blur(25px); pointer-events: none; z-index: 2;
-            animation: pulseL 3.5s ease-in-out infinite alternate;
-        }
-
-        .smoke-right {
-            position: absolute; top: 0; right: -25%;
-            width: 65%; height: 100%;
-            background: radial-gradient(circle at 90% 50%, rgba(29, 91, 179, 0.6), transparent 75%);
-            filter: blur(25px); pointer-events: none; z-index: 2;
-            animation: pulseR 3.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseL { 0% { opacity: 0.45; } 100% { opacity: 0.85; } }
-        @keyframes pulseR { 0% { opacity: 0.85; } 100% { opacity: 0.45; } }
-
-        /* MOLDURA / SOBREPOSIÇÃO SEM FUNDO DO CHALLENGE BOX K COM CONTRASTE LIMPO */
+        /* MOLDURA / SOBREPOSIÇÃO SEM FUNDO DO CHALLENGE BOX K */
         .frame-overlay-img {
             position: absolute;
             top: 0; left: 0;
@@ -128,13 +110,12 @@
             object-fit: cover;
             pointer-events: none;
             z-index: 3;
-            filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, 0.78)) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.9));
         }
 
-        /* CARD DE FRASES INDEPENDENTE NO TOPO (SEM ANCESTRAL COM pointer-events: none) */
+        /* SELETOR LIMPO POSICIONADO ABAIXO DO LOGO SUPERIOR */
         .badge-card {
             position: absolute;
-            top: max(54px, env(safe-area-inset-top) + 20px);
+            top: max(188px, env(safe-area-inset-top) + 145px);
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 28px);
@@ -145,52 +126,48 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 12px;
-            border-radius: 18px;
-            background: rgba(9, 13, 22, 0.88);
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.82);
+            padding: 4px 6px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
 
         .badge-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: 8px;
             width: 100%;
         }
 
         .btn-arrow {
             flex-shrink: 0;
-            width: 46px;
-            height: 46px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            border: 2px solid #ff9d3b;
-            background: linear-gradient(135deg, #F16623, #1d4ed8);
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            background: rgba(9, 13, 22, 0.55);
             color: #ffffff;
             font-family: Arial, sans-serif;
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 900;
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
             touch-action: manipulation;
         }
 
         .btn-arrow:active {
             transform: scale(0.86);
-            filter: brightness(1.25);
+            background: rgba(241, 102, 35, 0.75);
         }
 
         .badge-title-wrap {
-            flex: 1;
-            min-width: 0;
             cursor: pointer;
-            padding: 4px 4px;
-            border-radius: 10px;
+            padding: 2px 4px;
             touch-action: manipulation;
         }
 
@@ -199,25 +176,25 @@
         }
 
         .badge-title {
-            font-size: clamp(28px, 7.2vw, 40px);
-            font-weight: 700;
-            line-height: 1.02;
-            letter-spacing: 1.5px;
+            font-size: clamp(20px, 5.4vw, 28px);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: 1px;
             text-transform: uppercase;
             background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.98));
+            filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.95));
             display: block;
         }
 
         .badge-counter {
             font-family: 'Segoe UI', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            letter-spacing: 1px;
-            color: #fbbf24;
-            margin-top: 4px;
+            letter-spacing: 0.8px;
+            color: #ffffff;
+            margin-top: 2px;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
         }
 
@@ -228,7 +205,7 @@
         }
 
         #toastMsg {
-            position: absolute; top: 175px; left: 50%;
+            position: absolute; top: 265px; left: 50%;
             transform: translateX(-50%) translateY(-25px);
             background: rgba(15, 15, 25, 0.96); color: #fff;
             padding: 16px 24px; border-radius: 20px;
@@ -269,7 +246,7 @@
             position: absolute; bottom: max(20px, env(safe-area-inset-bottom));
             left: 50%; transform: translateX(-50%); width: 65%; max-width: 260px;
             display: flex; justify-content: space-around; align-items: center;
-            padding: 10px 15px; background: rgba(12, 12, 18, 0.88);
+            padding: 10px 15px; background: rgba(12, 12, 18, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 40px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85);
             z-index: 999;
@@ -309,9 +286,6 @@
     <div class="stage" id="stageArea">
         <video id="webcam" autoplay playsinline muted></video>
 
-        <div class="smoke-left"></div>
-        <div class="smoke-right"></div>
-
         <img id="frameOverlayImg" class="frame-overlay-img" crossorigin="anonymous" alt="Challenge Box K 2026">
 
         <div class="badge-card" id="badgeCard">
@@ -350,7 +324,7 @@
 
     <script>
         (async function purgeOldCacheOnOpen() {
-            const APP_VERSION = '2026.11.26-v26';
+            const APP_VERSION = '2026.11.26-v28';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const RELOAD_GUARD_KEY = 'challenge_boxk_reloaded_' + APP_VERSION;
 
@@ -575,40 +549,17 @@
 
             ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
-            const gradLeft = ctx.createRadialGradient(0, canvas.height / 2, 50, 0, canvas.height / 2, canvas.width * 0.5);
-            gradLeft.addColorStop(0, 'rgba(241, 102, 35, 0.55)'); gradLeft.addColorStop(1, 'transparent');
-            ctx.fillStyle = gradLeft; ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const gradRight = ctx.createRadialGradient(canvas.width, canvas.height / 2, 50, canvas.width, canvas.height / 2, canvas.width * 0.5);
-            gradRight.addColorStop(0, 'rgba(29, 91, 179, 0.6)'); gradRight.addColorStop(1, 'transparent');
-            ctx.fillStyle = gradRight; ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const logoSpotGrad = ctx.createRadialGradient(
-                canvas.width * 0.82, canvas.height * 0.84, 30,
-                canvas.width * 0.82, canvas.height * 0.84, canvas.width * 0.34
-            );
-            logoSpotGrad.addColorStop(0, 'rgba(0, 0, 0, 0.42)');
-            logoSpotGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = logoSpotGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             if (frameOverlayImg && frameOverlayImg.complete && frameOverlayImg.naturalWidth !== 0) {
-                ctx.save();
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-                ctx.shadowBlur = 14;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 4;
                 ctx.drawImage(frameOverlayImg, 0, 0, canvas.width, canvas.height);
-                ctx.restore();
             }
 
             ctx.save();
             const current = badgeList[currentBadgeIndex];
-            const titleFontSize = 84;
-            ctx.font = '700 ' + titleFontSize + 'px "Oswald", sans-serif';
+            const titleFontSize = 58;
+            ctx.font = '800 ' + titleFontSize + 'px "Montserrat", sans-serif';
             ctx.textAlign = 'center';
 
-            const textGrad = ctx.createLinearGradient(160, 0, 920, 0);
+            const textGrad = ctx.createLinearGradient(180, 0, 900, 0);
             textGrad.addColorStop(0, '#F16623');
             textGrad.addColorStop(0.48, '#ff9d3b');
             textGrad.addColorStop(1, '#2563eb');
@@ -616,13 +567,13 @@
             ctx.lineJoin = 'round';
             ctx.lineWidth = 7;
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.94)';
-            ctx.strokeText(current.title, canvas.width / 2, 258);
+            ctx.strokeText(current.title, canvas.width / 2, 530);
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
-            ctx.shadowBlur = 12;
-            ctx.shadowOffsetY = 4;
-            ctx.fillText(current.title, canvas.width / 2, 258);
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetY = 3;
+            ctx.fillText(current.title, canvas.width / 2, 530);
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
