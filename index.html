@@ -112,14 +112,14 @@
             z-index: 3;
         }
 
-        /* SELETOR LIMPO ACIMA DO LOGO SUPERIOR E ENCAIXADO COM FOLGA */
+        /* SELETOR LIMPO ACIMA DO LOGO SUPERIOR COM ESPAÇO EQUILIBRADO */
         .badge-card {
             position: absolute;
-            top: max(54px, env(safe-area-inset-top) + 32px);
+            top: max(76px, env(safe-area-inset-top) + 52px);
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 24px);
-            max-width: 400px;
+            width: calc(100% - 20px);
+            max-width: 410px;
             z-index: 999;
             text-align: center;
             display: flex;
@@ -142,14 +142,14 @@
 
         .btn-arrow {
             flex-shrink: 0;
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.65);
             background: rgba(9, 13, 22, 0.6);
             color: #ffffff;
             font-family: 'Inter', Arial, sans-serif;
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 800;
             line-height: 1;
             display: flex;
@@ -178,7 +178,7 @@
         }
 
         .badge-title {
-            font-size: clamp(13px, 3.5vw, 18px);
+            font-size: clamp(15px, 4.1vw, 22px);
             font-weight: 800;
             line-height: 1.15;
             letter-spacing: 0.4px;
@@ -186,7 +186,7 @@
             background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.95));
+            filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.96));
             display: block;
             white-space: nowrap;
             overflow: hidden;
@@ -194,8 +194,8 @@
         }
 
         .badge-title.long-phrase {
-            font-size: clamp(11px, 2.95vw, 15px);
-            letter-spacing: 0.2px;
+            font-size: clamp(13px, 3.45vw, 18px);
+            letter-spacing: 0.25px;
         }
 
         .badge-counter {
@@ -215,7 +215,7 @@
         }
 
         #toastMsg {
-            position: absolute; top: 155px; left: 50%;
+            position: absolute; top: 175px; left: 50%;
             transform: translateX(-50%) translateY(-25px);
             background: rgba(15, 15, 25, 0.96); color: #fff;
             padding: 16px 24px; border-radius: 20px;
@@ -334,7 +334,7 @@
 
     <script>
         (async function purgeOldCacheOnOpen() {
-            const APP_VERSION = '2026.11.27-v32';
+            const APP_VERSION = '2026.11.27-v33';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const RELOAD_GUARD_KEY = 'challenge_boxk_reloaded_' + APP_VERSION;
 
@@ -591,25 +591,25 @@
 
             ctx.save();
             const current = badgeList[currentBadgeIndex];
-            const titleFontSize = current.title.length > 20 ? 31 : 38;
+            const titleFontSize = current.title.length > 20 ? 39 : 48;
             ctx.font = '800 ' + titleFontSize + 'px "Inter", sans-serif';
             ctx.textAlign = 'center';
 
-            const textGrad = ctx.createLinearGradient(140, 0, 940, 0);
+            const textGrad = ctx.createLinearGradient(120, 0, 960, 0);
             textGrad.addColorStop(0, '#F16623');
             textGrad.addColorStop(0.48, '#ff9d3b');
             textGrad.addColorStop(1, '#2563eb');
 
             ctx.lineJoin = 'round';
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.92)';
-            ctx.strokeText(current.title, canvas.width / 2, 225);
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.94)';
+            ctx.strokeText(current.title, canvas.width / 2, 265);
 
             ctx.fillStyle = textGrad;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.92)';
-            ctx.shadowBlur = 7;
-            ctx.shadowOffsetY = 2;
-            ctx.fillText(current.title, canvas.width / 2, 225);
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.94)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetY = 3;
+            ctx.fillText(current.title, canvas.width / 2, 265);
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
