@@ -112,10 +112,10 @@
             z-index: 3;
         }
 
-        /* SELETOR LIMPO ACIMA DO LOGO SUPERIOR COM ESPAÇO EQUILIBRADO */
+        /* SELETOR LIMPO NO TOPO COM FRASE E SUBTÍTULO CHALLENGE BOX K 2026 */
         .badge-card {
             position: absolute;
-            top: max(76px, env(safe-area-inset-top) + 52px);
+            top: max(66px, env(safe-area-inset-top) + 44px);
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 20px);
@@ -178,9 +178,9 @@
         }
 
         .badge-title {
-            font-size: clamp(15px, 4.1vw, 22px);
+            font-size: clamp(16px, 4.3vw, 23px);
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.12;
             letter-spacing: 0.4px;
             text-transform: uppercase;
             background: linear-gradient(90deg, #F16623 0%, #ff9d3b 48%, #2563eb 100%);
@@ -194,8 +194,20 @@
         }
 
         .badge-title.long-phrase {
-            font-size: clamp(13px, 3.45vw, 18px);
+            font-size: clamp(13px, 3.5vw, 18px);
             letter-spacing: 0.25px;
+        }
+
+        .badge-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(10px, 2.8vw, 13px);
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-top: 3px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.98);
+            display: block;
         }
 
         .badge-counter {
@@ -203,7 +215,7 @@
             font-size: 9px;
             font-weight: 800;
             letter-spacing: 0.5px;
-            color: #ffffff;
+            color: #e2e8f0;
             margin-top: 2px;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95);
         }
@@ -303,6 +315,7 @@
                 <button type="button" class="btn-arrow" onclick="prevBadge()" title="Frase anterior" aria-label="Frase anterior">&#8249;</button>
                 <div class="badge-title-wrap" onclick="nextBadge()" title="Toque para mudar frase">
                     <span id="badgeTitle" class="badge-title">SOBREVIVI À PROVA</span>
+                    <span id="badgeSubtitle" class="badge-subtitle">CHALLENGE BOX K 2026</span>
                 </div>
                 <button type="button" class="btn-arrow" onclick="nextBadge()" title="Próxima frase" aria-label="Próxima frase">&#8250;</button>
             </div>
@@ -334,7 +347,7 @@
 
     <script>
         (async function purgeOldCacheOnOpen() {
-            const APP_VERSION = '2026.11.27-v33';
+            const APP_VERSION = '2026.11.27-v34';
             const VERSION_KEY = 'challenge_boxk_app_ver';
             const RELOAD_GUARD_KEY = 'challenge_boxk_reloaded_' + APP_VERSION;
 
@@ -371,6 +384,8 @@
             } catch (e) {}
         })();
 
+        const SUBTITLE_TEXT = "CHALLENGE BOX K 2026";
+
         const badgeList = [
             { title: "SOBREVIVI À PROVA" },
             { title: "MODO K ATIVADO" },
@@ -397,6 +412,7 @@
             currentBadgeIndex = ((currentBadgeIndex % total) + total) % total;
             const current = badgeList[currentBadgeIndex];
             const titleEl = document.getElementById('badgeTitle');
+            const subEl = document.getElementById('badgeSubtitle');
             const countEl = document.getElementById('badgeCounter');
             if (titleEl) {
                 titleEl.textContent = current.title;
@@ -406,6 +422,7 @@
                     titleEl.classList.remove('long-phrase');
                 }
             }
+            if (subEl) subEl.textContent = SUBTITLE_TEXT;
             if (countEl) countEl.textContent = (currentBadgeIndex + 1) + ' / ' + total + ' • TOQUE NAS SETAS';
         }
 
@@ -444,7 +461,7 @@
             const cacheBuster = 'v=' + Date.now();
 
             if (frameOverlayImg) {
-                frameOverlayImg.src = "https://i.ibb.co/v465qCDT/ajustado-semfundo.png?" + cacheBuster;
+                frameOverlayImg.src = "https://i.ibb.co/5XgG8ntD/ajuste-final.png?" + cacheBuster;
             }
 
             let revealed = false;
@@ -592,6 +609,9 @@
             ctx.save();
             const current = badgeList[currentBadgeIndex];
             const titleFontSize = current.title.length > 20 ? 39 : 48;
+            const titleY = 250;
+            const subtitleY = titleY + titleFontSize + 18;
+
             ctx.font = '800 ' + titleFontSize + 'px "Inter", sans-serif';
             ctx.textAlign = 'center';
 
@@ -603,13 +623,22 @@
             ctx.lineJoin = 'round';
             ctx.lineWidth = 6;
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.94)';
-            ctx.strokeText(current.title, canvas.width / 2, 265);
+            ctx.strokeText(current.title, canvas.width / 2, titleY);
 
             ctx.fillStyle = textGrad;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.94)';
             ctx.shadowBlur = 8;
             ctx.shadowOffsetY = 3;
-            ctx.fillText(current.title, canvas.width / 2, 265);
+            ctx.fillText(current.title, canvas.width / 2, titleY);
+
+            ctx.shadowBlur = 6;
+            ctx.shadowOffsetY = 2;
+            ctx.font = '800 26px "Inter", sans-serif';
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.95)';
+            ctx.strokeText(SUBTITLE_TEXT, canvas.width / 2, subtitleY);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(SUBTITLE_TEXT, canvas.width / 2, subtitleY);
             ctx.restore();
 
             ctx.shadowColor = 'transparent';
